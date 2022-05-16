@@ -1,0 +1,28 @@
+// here goes generic styles for elements h1, buttons...
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Raleway", sans-serif;
+  color: $clr5;
+}
+
+body {
+  margin: 0;
+  background-color: $clr2;
+}
+
+a {
+  color: $clr5;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+}
