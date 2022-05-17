@@ -9,31 +9,45 @@ export const gameService = {
 
 const GAMES_KEY = 'free games'
 
-const options = {
-    method: 'GET',
-    url: 'https://free-to-play-games-database.p.rapidapi.com/api/games',
-    headers: {
-        'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com',
-        'X-RapidAPI-Key': 'd3f1c4cd2dmshc8299f35c9cd3cdp174c21jsna29fef61fb0b'
-    }
-};
 async function getGames(page) {
     let games = await storageService.query(GAMES_KEY)
     if (!games.length) {
+        const options = {
+            method: 'GET',
+            url: 'https://free-to-play-games-database.p.rapidapi.com/api/games',
+            headers: {
+                'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com',
+                'X-RapidAPI-Key': 'd3f1c4cd2dmshc8299f35c9cd3cdp174c21jsna29fef61fb0b'
+            }
+        };
         console.log('api')
-        axios.request(options).then(function (response) {
-            console.log(response.data);
-            games = response.data
+        // return axios.request(options)
+        //     .then(response => {
+        //         console.log(response.data);
+        //         games = response.data
+        //         storageService.post(GAMES_KEY, games)
+        //         return games.slice(0, 15)
+        //     })
+        //     .catch(error => {
+        //         console.error(error);
+        //         throw new Error('error on quey FE', error)
+        //     });
+        try {
+            const res = await axios.request(options)
+            console.log('res.data', res.data)
+            games = res.data
             storageService.post(GAMES_KEY, games)
-            return games[0].slice(0, 15)
-        }).catch(function (error) {
+            return games.slice(0, 15)
+        } catch (error) {
+
             console.error(error);
-            throw new Error('error on quey FE', error)
-        });
+            throw new Error('error getGames', error)
+        }
     } else {
         console.log('local')
         console.log('games', games)
-        return games[0].slice(0, 15)
+        games = games.flat()
+        return games.slice(0, 15)
     }
 }
 
@@ -48,11 +62,11 @@ async function getGame(id) {
             'X-RapidAPI-Key': 'd3f1c4cd2dmshc8299f35c9cd3cdp174c21jsna29fef61fb0b'
         }
     }
-    axios.request(options).then(async function (response) {
+    return axios.request(options).then(response => {
         console.log(response.data);
-        const game = await response.data
+        const game = response.data
         return game
-    }).catch(function (error) {
+    }).catch(error => {
         console.error(error);
         throw new Error('error on quey FE', error)
     });

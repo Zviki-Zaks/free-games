@@ -2,4 +2,22 @@
     background-color: $clr5;
     color: $clr2;
     padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 5px #ffffff36;
+    p {
+        font-weight: 600;
+        span {
+            font-weight: normal;
+        }
+    }
+    .description {
+        button {
+            background-color: inherit;
+            border: none;
+            cursor: pointer;
+        }
+    }
+    a {
+        color: $clr2;
+    }
 }

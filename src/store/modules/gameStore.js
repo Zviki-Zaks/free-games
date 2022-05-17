@@ -35,8 +35,8 @@ export default {
         async loadGame({ commit }, { gameId }) {
             try {
 
-                // const game = await gameService.getGame(gameId)
-                const game = await gameService.getGameById(gameId)
+                const game = await gameService.getGame(gameId)
+                // const game = await gameService.getGameById(gameId)
                 console.log('game', game)
                 commit({ type: 'setGame', game })
                 return game
