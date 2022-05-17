@@ -8,8 +8,9 @@ export const gameService = {
 }
 
 const GAMES_KEY = 'free games'
+let prePage = 0
 
-async function getGames(page) {
+async function getGames(filterBy = { title: '', genre: 'a' }, limit, page) {
     let games = await storageService.query(GAMES_KEY)
     if (!games.length) {
         const options = {
@@ -34,10 +35,9 @@ async function getGames(page) {
         //     });
         try {
             const res = await axios.request(options)
-            console.log('res.data', res.data)
             games = res.data
             storageService.post(GAMES_KEY, games)
-            return games.slice(0, 15)
+            return _filter(games.slice(page * limit, page * limit + limit), filterBy)
         } catch (error) {
 
             console.error(error);
@@ -45,9 +45,10 @@ async function getGames(page) {
         }
     } else {
         console.log('local')
-        console.log('games', games)
         games = games.flat()
-        return games.slice(0, 15)
+        games = _filter(games, filterBy)
+        return games.slice(page * limit, page * limit + limit)
+
     }
 }
 
@@ -78,8 +79,19 @@ async function getGameById(id) {
     let game
     const games = await storageService.query(GAMES_KEY)
     games.forEach(arr => {
-        console.log('arr', arr)
         game = arr.find(g => g.id === id)
     });
     return game
+}
+
+function _filter(items, { title, genre }) {
+    const regexTitle = new RegExp(title, 'i')
+    const regexGenre = new RegExp(genre, 'i')
+    const res = items.filter(item => {
+        if (regexTitle.test(item.title) && regexGenre.test(item.genre)) {
+            return item
+        }
+    })
+    return res
+    // return items.filter(item => item[filterBy.title])
 }

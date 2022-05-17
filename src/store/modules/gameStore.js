@@ -3,7 +3,13 @@ import { gameService } from "../../../service/game.service"
 export default {
     state: {
         games: null,
-        game: null
+        game: null,
+        filterBy: {
+            title: '',
+            genre: ''
+        },
+        limit: 15,
+        page: 0
     },
     getters: {
         getGames({ games }) {
@@ -20,12 +26,28 @@ export default {
         setGame(state, { game }) {
             state.game = game
         },
+        setFilterBy(state, { filterBy }) {
+            state.filterBy = filterBy
+        },
+        setLimit(state, { limit }) {
+            state.limit = limit
+        },
+        setPage(state, { diff }) {
+            let { page } = state
+            page += diff
+            if (page < 0) {
+                return
+            }
+            else {
+                state.page = page
+            }
+        }
     },
     actions: {
-        async loadGames({ commit }, { filterBy }) {
+        async loadGames({ commit, state }, { filterBy }) {
             try {
-                const games = await gameService.getGames()
-                console.log('games', games)
+                const { filterBy, limit, page } = state
+                const games = await gameService.getGames(filterBy, limit, page)
                 commit({ type: 'setGames', games })
 
             } catch (error) {
@@ -37,7 +59,6 @@ export default {
 
                 const game = await gameService.getGame(gameId)
                 // const game = await gameService.getGameById(gameId)
-                console.log('game', game)
                 commit({ type: 'setGame', game })
                 return game
             } catch (error) {

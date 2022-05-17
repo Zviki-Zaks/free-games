@@ -6,8 +6,8 @@
       </div> -->
       <h3>FREEGAMES</h3>
       <nav class="header-nav flex">
-        <a href="">Features</a>
-        <a href="">Team</a>
+        <a href="">Home</a>
+        <a href="">About</a>
         <a href="">Sing in</a>
       </nav>
     </div>
