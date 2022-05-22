@@ -1,5 +1,5 @@
 # Free Games
 
-Quike project, using RapidApi
+Quick project, using RapidApi
 
 **Vue.js** | **vuex**
